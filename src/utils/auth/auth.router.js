@@ -7,7 +7,7 @@ const authRouter = Router()
 
 authRouter.post('/login', checkSchema(authController.loginValidate), authController.login)
 
-authRouter.use(authController.protect)
+//authRouter.use(authController.protect)
 authRouter.route('/identify').get(authController.identify)
 
 export default authRouter;
