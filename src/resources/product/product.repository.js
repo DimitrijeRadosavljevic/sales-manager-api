@@ -1,17 +1,38 @@
 import { respondError } from "../../helpers/response";
 
-export const postProduct = async (productSchema, product, response) => {
-    return new Promise((resolve, reject) => {
-        productSchema.create(product, (err, product) => {
-            if(err) return reject ("Error");
+export const postProduct = async (productSchema, product, imagePath) => {
 
-            return resolve (product);
-        })
+    const productForCreation = {...product, imagePath: imagePath }
+    return await productSchema.create(productForCreation).then(data => {
+        return {success: true, data: data}
+    }).catch(err => {
+        return {success: false, error: err};
     })
+}
 
-    // await productSchema.create(product, (err, product) => {
-    //             if(err) response.send("Error");
-    
-    //             response.send(product);
-    //         })
+export const getProducts = async (productShema) => {
+
+    return await productShema.find({}).then(products => {
+        if(products) {
+            return {success: true, data: products }
+        } else {
+            return {success: true, data: [] }
+        }
+    }).catch(err => {
+        return {success: false, error: err}
+    })
+}
+
+export const getProduct = async (productShema, productId) => {
+
+    return await productShema.findById(productId).then(product => {
+        console.log(product);
+        if(product) {
+            return {success: true, data: product }
+        } else {
+            return { success: false, error: "Product do not exist", status: 404}
+        }
+    }).catch(err => {
+        return {success: false, error: err, status: 500}
+    })
 }

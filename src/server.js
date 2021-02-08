@@ -9,6 +9,7 @@ import {User} from "./resources/user/user.model";
 import authRouter from "./utils/auth/auth.router";
 import { Product } from './resources/product/product.model';
 import { productRouter } from './resources/product/product.router';
+const path = require('path');
 
 export const app = express()
 
@@ -18,6 +19,7 @@ app.use(cors())
 app.use(json())
 app.use(urlencoded({extended: true}))
 app.use(morgan('dev'))
+app.use('/images', express.static(path.join('images')))
 
 // app.use('/', (req, res) => {
 //   return res.status(200).send("Hello");
@@ -39,6 +41,8 @@ export const start = async () => {
 
     //   console.log("Product:", productic);
     // });
+
+    //await Product.create( {}).then(data => {} ).catch(err => { })
 
     return app.listen(baseConfig.port, () => {
       console.log(`Sales Manager api listening on http://localhost:${baseConfig.port}/api`)
