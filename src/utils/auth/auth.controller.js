@@ -12,7 +12,7 @@ const login = async (req, res) => {
 
   try {
     const user = await User.findOne({ email: email })
-      .select('email password')
+      // .select('email password')
       .exec()
 
     if (!user) {
@@ -55,11 +55,10 @@ const register = async (req, res) => {
   try {
     const hash = await createHashPassword(req.body.password);
     req.body.password = hash;
-    const user = await User.create(req.body)
+    const user = await User.create({ ...req.body, owner: true})
     const token = newToken(user)
     return res.status(201).send({ token, data: user })
   } catch (error) {
-    console.log(error)
     return res.status(500).end()
   }
 }
