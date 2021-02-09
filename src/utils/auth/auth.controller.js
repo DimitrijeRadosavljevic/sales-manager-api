@@ -1,4 +1,4 @@
-import { newToken, verifyToken, checkPassword } from "./auth.service";
+import {newToken, verifyToken, checkPassword, createHashPassword} from "./auth.service";
 import { respondError } from "../../helpers/response";
 import { validationResult } from "express-validator";
 import { User } from "../../resources/user/user.model";
@@ -12,7 +12,7 @@ const login = async (req, res) => {
 
   try {
     const user = await User.findOne({ email: email })
-      .select('email password')
+      // .select('email password')
       .exec()
 
     if (!user) {
@@ -30,6 +30,36 @@ const login = async (req, res) => {
   } catch (error) {
     console.log(error)
     return respondError(res, null, 500)
+  }
+}
+
+const register = async (req, res) => {
+
+  if (!req.body.email || !req.body.password) {
+    return res.status(400).send({ message: 'need email and password' })
+  }
+
+  try {
+    const user = await User.findOne({email: req.body.email})
+      .select('email password')
+      .exec()
+
+    if(user)
+      respondError(res, "Email taken", 400);
+  }
+  catch (error) {
+    return respondError(res, null, 500)
+  }
+
+
+  try {
+    const hash = await createHashPassword(req.body.password);
+    req.body.password = hash;
+    const user = await User.create({ ...req.body, owner: true})
+    const token = newToken(user)
+    return res.status(201).send({ token, data: user })
+  } catch (error) {
+    return res.status(500).end()
   }
 }
 
@@ -79,6 +109,7 @@ const loginValidate = {
 
 export const authController = {
   login,
+  register,
   protect,
   identify,
 
