@@ -19,7 +19,8 @@ app.use(cors())
 app.use(json())
 app.use(urlencoded({extended: true}))
 app.use(morgan('dev'))
-app.use('/images', express.static(path.join('images')))
+app.use('/product_images', express.static(path.join('storage/app/product_images')))
+
 
 app.use(authRouter)
 app.use('/api', userRouter)
