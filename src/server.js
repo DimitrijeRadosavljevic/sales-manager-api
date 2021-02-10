@@ -4,11 +4,11 @@ import morgan from 'morgan'
 import cors from 'cors'
 import { baseConfig } from "./config";
 import { connect } from "./utils/db/db";
-import {createHashPassword} from "./utils/auth/auth.service";
-import {User} from "./resources/user/user.model";
+
 import authRouter from "./utils/auth/auth.router";
-import { Product } from './resources/product/product.model';
 import { productRouter } from './resources/product/product.router';
+import { userRouter } from "./resources/user/user.router";
+
 const path = require('path');
 
 export const app = express()
@@ -21,11 +21,10 @@ app.use(urlencoded({extended: true}))
 app.use(morgan('dev'))
 app.use('/images', express.static(path.join('images')))
 
-// app.use('/', (req, res) => {
-//   return res.status(200).send("Hello");
-// })
 app.use(authRouter)
+app.use('/api', userRouter)
 app.use('/api', productRouter);
+
 export const start = async () => {
   try {
     await connect()
