@@ -12,7 +12,8 @@ const userSchema = new mongoose.Schema(
       type: String
     },
     employeeNumber: {
-
+      type: String,
+      required: true
     },
     role: {
       type: String,
@@ -35,7 +36,7 @@ const userSchema = new mongoose.Schema(
           type: Date,
           required: true
         },
-        role: {
+        newRole: {
           type: String,
           required: true,
           enum: ['junior', 'medior', 'senior', 'head-seller']
@@ -44,17 +45,46 @@ const userSchema = new mongoose.Schema(
       }
     ],
     startedWorking: {
-
+      type: Date,
+      required: true
     },
-    vacations: {
-
-    },
-    contacts: {
-
-    },
-    addresses: {
-
-    },
+    vacations: [
+      {
+        from: {
+          type: Date,
+          required: true
+        },
+        to: {
+          type: Date,
+          required: true
+        },
+        note: {
+          type: String,
+          required: false
+        }
+      }
+    ],
+    contacts: [
+      {
+        type: {
+          type: String,
+          required: true,
+          enum: ['number', 'email']
+        },
+        value: {
+          type: String,
+          required: true
+        }
+      }
+    ],
+    addresses: [
+      {
+        street: String,
+        city: String,
+        country: String,
+        postalCode: String,
+      }
+    ],
     owner: {
       type: Boolean,
       required: true

@@ -1,4 +1,3 @@
-import { User } from './user.model'
 import * as userRepository from './user.repository'
 import {respondSuccess} from "../../helpers/response";
 
@@ -11,10 +10,15 @@ export const getEmployees = async (req, res) => {
 
 export const postEmployee = async (req, res) => {
 
+  const user = await userRepository.createEmployee({ ...req.body, owner: false })
+  return respondSuccess(res, user, 201)
 }
 
 export const getEmployee = async (req, res) => {
 
+  const employeeId = req.params.employeeId
+  const employees = await userRepository.getEmployee(employeeId)
+  return respondSuccess(res, employees, 200)
 }
 
 export const putEmployee = async (req, res) => {
