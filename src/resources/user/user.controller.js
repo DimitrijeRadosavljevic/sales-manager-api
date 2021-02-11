@@ -10,7 +10,7 @@ export const getEmployees = async (req, res) => {
 
 export const postEmployee = async (req, res) => {
 
-  const user = await userRepository.createEmployee({ ...req.body, owner: false })
+  const user = await userRepository.createEmployee({ ...req.body, owner: false, ownerId: req.user.id })
   return respondSuccess(res, user, 201)
 }
 
@@ -26,5 +26,9 @@ export const putEmployee = async (req, res) => {
 }
 
 export const deleteEmployee = async (req, res) => {
+
+  const employeeId = req.params.employeeId
+  const result = await userRepository.deleteEmployee(employeeId)
+  return respondSuccess(res, null, 200)
 
 }

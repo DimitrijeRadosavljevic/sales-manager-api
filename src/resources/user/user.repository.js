@@ -3,14 +3,13 @@ import {User} from "./user.model";
 
 export const getEmployees = async (ownerId) => {
 
-  return await User.find().then(employees => {
+  return await User.find().where('ownerId', ownerId).then(employees => {
     return employees
   })
 }
 
 export const getEmployee = async (employeeId) => {
 
-  console.log(employeeId)
   return await User.findById(employeeId).then(employee => {
     return employee
   })
@@ -27,6 +26,9 @@ export const updateEmployees = async () => {
 
 }
 
-export const deleteEmployee = async () => {
+export const deleteEmployee = async (employeeId) => {
 
+  return await User.findByIdAndRemove(employeeId).then(() => {
+    return
+  })
 }

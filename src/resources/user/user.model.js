@@ -1,7 +1,9 @@
-import mongoose from 'mongoose'
-
 const userSchema = new mongoose.Schema(
   {
+    ownerId: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'user'
+    },
     firstName: {
       type: String
     },
@@ -93,6 +95,8 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 )
+
+import mongoose from 'mongoose'
 
 
 export const User = mongoose.model('user', userSchema)
