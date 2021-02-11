@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
+var mongoosePaginate = require('mongoose-paginate');
+const Schema = mongoose.Schema
 
-const productSchema = new mongoose.Schema({
+const productSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -10,7 +12,9 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-
+    ownerId: {
+        type: Schema.Types.ObjectId, ref: 'user'
+    },
     color: {
         type: String
     },
@@ -34,5 +38,5 @@ const productSchema = new mongoose.Schema({
 
     imagePath: String
 });
-
+productSchema.plugin(mongoosePaginate);
 export const Product = mongoose.model('product', productSchema);

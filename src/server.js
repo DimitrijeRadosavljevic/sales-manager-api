@@ -36,7 +36,7 @@ export const start = async () => {
     //    console.log("Data: ", data);
     //  })
 
-    // await Product.create( { name: "ProductName", code: "354354354", color: "orange", dimensions: { height: 154, width: 354}}, (err, productic) => {
+    // await Product.paginate( { name: "ProductName", code: "354354354", color: "orange", dimensions: { height: 154, width: 354}}, (err, productic) => {
     //   if(err) console.log(err)
 
     //   console.log("Product:", productic);
