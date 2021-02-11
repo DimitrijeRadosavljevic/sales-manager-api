@@ -26,7 +26,7 @@ export const getProducts = async (productShema) => {
 export const getProduct = async (productShema, productId) => {
 
     return await productShema.findById(productId).then(product => {
-        console.log(product);
+        
         if(product) {
             return {success: true, data: product }
         } else {

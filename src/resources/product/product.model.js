@@ -16,15 +16,19 @@ const productSchema = new mongoose.Schema({
     },
 
     dimensions: {
-        height: Number,
-        width: Number 
+        x: Number,
+        y: Number,
+        z: Number 
     },
 
-    staffSalePrice: Number,
+    staffSalePrice: {
+        type: Number,
+        required: true
+    },
 
     staffSaleType: String,
 
-    quanitity: Number,
+    quantity: Number,
 
     homeDelivery: Boolean,
 
