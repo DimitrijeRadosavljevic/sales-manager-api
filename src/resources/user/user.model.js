@@ -1,3 +1,7 @@
+import mongoose from 'mongoose'
+const mongoosePaginate = require('mongoose-paginate');
+
+
 const userSchema = new mongoose.Schema(
   {
     ownerId: {
@@ -96,7 +100,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
-import mongoose from 'mongoose'
 
-
+userSchema.plugin(mongoosePaginate)
 export const User = mongoose.model('user', userSchema)
