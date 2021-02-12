@@ -1,7 +1,7 @@
 import * as productRepository from "./product.repository"
 import { Product } from "./product.model";
 import { respondError, respondSuccess } from "../../helpers/response";
-import * as productRepositrory from "./product.repository";
+import * as fileDelete from "../../helpers/file-delete";
 
 export const postProduct = async (req, res) => {
     var imagePath = '';
@@ -43,6 +43,11 @@ export const deleteProduct = async (req, res) => {
 
     //TODO Check does user own product
 
+    const deleteImageSuccess = await fileDelete.unlinkFile(req.query.imagePath);
+
+    if(!deleteImageSuccess)
+        return respondError(res, "Error occured", 500); 
+
     const product = await productRepository.deleteProduct(req.params.productId);
     if(product.success == true) {
         return respondSuccess(res, null, 200);
@@ -56,15 +61,18 @@ export const updateProduct = async (req, res) => {
     //TODO Check does user own product
 
     let imagePath = JSON.parse(req.body.product).imagePath;
-    //console.log(imagePath, "Slovca");
+
     if(imagePath != "" && req.file) {
 
-        //TODO delete old image
-        //console.log("Trebalo je da izbrise");
+        const deleteImageSuccess = await fileDelete.unlinkFile(imagePath);
+        if(!deleteImageSuccess)
+            return respondError(res, "Error ocured", 500);
+
     }
     if(req.file) {
+
         imagePath = 'http://localhost:3000/product_images/' + req.file.filename;
-        //console.log("Promenjena slika");
+
     }
     const product = await productRepository.updateProduct(req.params.productId, JSON.parse(req.body.product), imagePath);
     if(product.success == true) {

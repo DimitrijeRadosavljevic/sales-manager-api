@@ -43,7 +43,6 @@ export const deleteProduct = async (productId) => {
     console.log(productId);
     const productForDelete = mongoose.mongo.ObjectId(productId) 
     return await Product.findByIdAndDelete(productForDelete).then(data => {
-        console.log(data);
         return {success: true, data: data}
     }).catch(err => {
         return {success: false, error: err};
