@@ -1,9 +1,11 @@
 import {User} from "./user.model";
+import mongoose from "mongoose";
 
 
-export const getEmployees = async (ownerId) => {
+export const getEmployees = async (ownerId, page, perPage) => {
 
-  return await User.find().where('ownerId', ownerId).then(employees => {
+  let skip = (page - 1) * perPage;
+  return await User.paginate({ ownerId: mongoose.mongo.ObjectId(ownerId)}, { offset: skip, limit: +perPage}).then(employees => {
     return employees
   })
 }
@@ -22,8 +24,11 @@ export const createEmployee = async (user) => {
   })
 }
 
-export const updateEmployees = async () => {
+export const updateEmployees = async (employee) => {
 
+  return await User.findByIdAndUpdate(employee._id, employee).then(employee => {
+    return employee
+  })
 }
 
 export const deleteEmployee = async (employeeId) => {
