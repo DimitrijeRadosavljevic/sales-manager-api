@@ -17,6 +17,11 @@ export const getOrders = async (userId, perPage, page) => {
     })
 }
 
-export const postOrder = async (userId, order) => {
-    return await Order.create()
+export const postOrder = async (user, order) => {
+    const orderForCreate = {};
+    return await Order.create(orderForCreate).then(order => {
+        return { success: true, data: order }
+    }).catch(error => {
+        return { success: false, error: error}
+    })
 }
