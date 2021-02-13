@@ -1,6 +1,6 @@
 import * as userRepository from './user.repository'
 import {respondSuccess} from "../../helpers/response";
-import {User} from "./user.model";
+import {createHashPassword} from "../../utils/auth/auth.service";
 
 export const getEmployees = async (req, res) => {
 
@@ -14,6 +14,8 @@ export const getEmployees = async (req, res) => {
 
 export const postEmployee = async (req, res) => {
 
+  const hash = await createHashPassword(req.body.password)
+  req.body.password = hash;
   const user = await userRepository.createEmployee({ ...req.body, owner: false, ownerId: req.user.id })
 
   return respondSuccess(res, user, 201)

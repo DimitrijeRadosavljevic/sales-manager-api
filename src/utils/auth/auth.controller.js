@@ -1,5 +1,5 @@
 import {newToken, verifyToken, checkPassword, createHashPassword} from "./auth.service";
-import { respondError } from "../../helpers/response";
+import {respondError} from "../../helpers/response";
 import { validationResult } from "express-validator";
 import { User } from "../../resources/user/user.model";
 
@@ -15,6 +15,7 @@ const login = async (req, res) => {
       // .select('email password')
       .exec()
 
+
     if (!user) {
       return respondError(res, null, 401)
     }
@@ -25,10 +26,10 @@ const login = async (req, res) => {
       return respondError(res, null, 401)
     }
 
+
     const token = newToken(user)
-    return res.status(201).send({ token, data: user })
+    return res.status(200).send({ token, data: user })
   } catch (error) {
-    console.log(error)
     return respondError(res, null, 500)
   }
 }
@@ -76,7 +77,7 @@ const protect = async (req, res, next) => {
   }
 
   const user = await User.findById( payload.id )
-    .select('email password owner')
+    .select('_id email password ownerId owner')
     .exec()
 
   req.user = user;

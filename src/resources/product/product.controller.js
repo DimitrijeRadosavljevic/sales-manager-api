@@ -19,7 +19,9 @@ export const postProduct = async (req, res) => {
 
 export const getProducts = async (req, res) => {
 
-    const products = await productRepository.getProducts(Product, req.user._id, req.query.perPage || 6, req.query.page || 1);
+    const ownerId = req.user.owner ? req.user._id : req.user.ownerId
+
+    const products = await productRepository.getProducts(Product, ownerId, req.query.perPage || 6, req.query.page || 1);
     if(products.success == true) {
         return respondSuccess(res, products.data, 200);
     } else {

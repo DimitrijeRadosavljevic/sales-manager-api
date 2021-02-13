@@ -10,7 +10,7 @@ const orderSchema = new Schema({
         address: String,
         phone: String
     },
-    cardItems: [
+    chartItems: [
         {
             name: String, 
             code: String,
