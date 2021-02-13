@@ -2,10 +2,18 @@ import {User} from "./user.model";
 import mongoose from "mongoose";
 
 
-export const getEmployees = async (ownerId, page, perPage) => {
+export const getEmployees = async (ownerId, page, perPage, filter) => {
 
   let skip = (page - 1) * perPage;
-  return await User.paginate({ ownerId: mongoose.mongo.ObjectId(ownerId)}, { offset: skip, limit: +perPage}).then(employees => {
+  return await User.paginate({
+                  ownerId: mongoose.mongo.ObjectId(ownerId),
+                  $or: [
+                      { firstName: {$regex: filter, "$options": "i"}},
+                      { middleName: {$regex: filter, "$options": "i"}},
+                      { lastName: {$regex: filter, "$options": "i"}}
+                  ]
+                  },
+          { offset: skip, limit: +perPage}).then(employees => {
     return employees
   })
 }
