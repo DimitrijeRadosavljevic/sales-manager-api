@@ -5,4 +5,6 @@ export const orderRouter = new Router();
 
 orderRouter.route('/orders')
     .get( orderController.getOrders )
-    .post( orderController.postProduct )
+    .post( orderController.postOrder )
+orderRouter.route('/orders/:orderId')
+    .get( orderController.getOrder )

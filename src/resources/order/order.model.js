@@ -7,10 +7,10 @@ const orderSchema = new Schema({
         name: String,
         lastName: String,
         email: String,
-        adress: String,
+        address: String,
         phone: String
     },
-    cardItem: [
+    cardItems: [
         {
             name: String, 
             code: String,
@@ -20,7 +20,8 @@ const orderSchema = new Schema({
                 y:Number,
                 z:Number 
             },
-            quantity: Number
+            quantity: Number,
+            color: String,
         }
     ],
     amount: Number,
@@ -30,8 +31,12 @@ const orderSchema = new Schema({
     },
     ownerId: {
         type: Schema.Types.ObjectId, ref: 'user'
+    },
+    date: {
+        type: Date,
+        default: Date.now
     }
 })
 
 orderSchema.plugin(mongoosePaginate);
-export const Order = mongoose.Model('order', orderSchema);
+export const Order = mongoose.model('order', orderSchema);
