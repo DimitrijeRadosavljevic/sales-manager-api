@@ -21,7 +21,7 @@ export const getProducts = async (req, res) => {
 
     const ownerId = req.user.owner ? req.user._id : req.user.ownerId
 
-    const products = await productRepository.getProducts(Product, ownerId, req.query.perPage || 6, req.query.page || 1);
+    const products = await productRepository.getProducts(Product, ownerId, req.query.perPage || 6, req.query.page || 1, req.query.filter || "");
     if(products.success == true) {
         return respondSuccess(res, products.data, 200);
     } else {

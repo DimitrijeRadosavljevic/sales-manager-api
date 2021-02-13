@@ -11,10 +11,10 @@ export const postProduct = async (productSchema, userId, product, imagePath) => 
     })
 }
 
-export const getProducts = async (productShema, userId, perPage, page) => {
+export const getProducts = async (productShema, userId, perPage, page, filter) => {
 
     let skip = (page - 1) * perPage;
-    return await productShema.paginate({ownerId: mongoose.mongo.ObjectId(userId)}, {offset: skip, limit: +perPage}).then(products => {
+    return await productShema.paginate({ownerId: mongoose.mongo.ObjectId(userId), $or: [{ name: {$regex: filter, "$options": "i"}},{ code: {$regex: filter, "$options": "i"}}]}, {offset: skip, limit: +perPage}).then(products => {
         if(products.docs) {
             return {success: true, data: { products: products.docs, total: products.total } }
         } else {
