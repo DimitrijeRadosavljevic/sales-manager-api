@@ -76,7 +76,7 @@ const protect = async (req, res, next) => {
   }
 
   const user = await User.findById( payload.id )
-    .select('email password')
+    .select('email password owner')
     .exec()
 
   req.user = user;
