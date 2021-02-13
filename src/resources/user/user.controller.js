@@ -7,7 +7,8 @@ export const getEmployees = async (req, res) => {
   const ownerId = req.user.id
   const page = req.query.page
   const perPage = req.query.perPage
-  const employees = await userRepository.getEmployees(ownerId, page, perPage)
+  const filter = req.query.filter
+  const employees = await userRepository.getEmployees(ownerId, page, perPage, filter)
 
   return respondSuccess(res, employees, 200)
 }
