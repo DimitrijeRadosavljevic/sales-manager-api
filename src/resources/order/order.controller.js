@@ -37,3 +37,13 @@ export const getOrder = async (req, res) => {
         return respondError(res, "Error ocured: " + productRouter.error, 500);
     }
 }
+
+export const getReportsPerProduct = async (req, res) => {
+
+    const reportsPerProduct = await orderRepository.getReportsPerProduct(req.user._id, req.query.perPage || 6, req.query.page || 1, req.query.filter || "");
+    if(reportsPerProduct.success == true) {
+        return respondSuccess(res, reportsPerProduct.data, 200);
+    } else {
+        return respondError(res, "Error ocured: "+ reportsPerProduct.error);
+    }
+}
