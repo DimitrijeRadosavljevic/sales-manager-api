@@ -12,6 +12,10 @@ const orderSchema = new Schema({
     },
     chartItems: [
         {
+            _id: {
+                type: Schema.Types.ObjectId,
+                ref: 'product'
+            },
             name: String, 
             code: String,
             staffSalePrice: Number,
@@ -26,8 +30,23 @@ const orderSchema = new Schema({
     ],
     amount: Number,
     status: Boolean,
-    createdBy: {
-        type: Schema.Types.ObjectId, ref: 'user'
+    seller: {
+        _id: {
+            type: Schema.Types.ObjectId,
+            ref: 'user'
+        },
+        firstName: {
+            type: String,
+            required: true
+        },
+        lastName: {
+            type: String,
+            required: true
+        },
+        email: {
+            type: String,
+            required: true
+        }
     },
     ownerId: {
         type: Schema.Types.ObjectId, ref: 'user'

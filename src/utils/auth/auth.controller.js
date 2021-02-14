@@ -56,10 +56,11 @@ const register = async (req, res) => {
   try {
     const hash = await createHashPassword(req.body.password);
     req.body.password = hash;
-    const user = await User.create({ ...req.body, owner: true, role: 'head-seller'})
+    const user = await User.create({ ...req.body, owner: true })
     const token = newToken(user)
     return res.status(201).send({ token, data: user })
   } catch (error) {
+    console.log(error)
     return res.status(500).end()
   }
 }

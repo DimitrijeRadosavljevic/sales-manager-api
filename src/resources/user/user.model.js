@@ -19,11 +19,11 @@ const userSchema = new mongoose.Schema(
     },
     employeeNumber: {
       type: String,
-      required: true
+      required: false
     },
     role: {
       type: String,
-      required: true,
+      required: false,
       enum: ['junior', 'medior', 'senior', 'head-seller']
     },
     email: {
@@ -51,8 +51,7 @@ const userSchema = new mongoose.Schema(
       }
     ],
     startedWorking: {
-      type: Date,
-      required: true
+      type: Date
     },
     vacations: [
       {
