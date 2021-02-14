@@ -5,7 +5,7 @@ import { Order } from "./order.model";
 export const getOrders = async (userId, perPage, page) => {
 
     let skip = (page - 1) * perPage;
-    return await Order.paginate({ownerId: mongoose.mongo.ObjectId(userId)}, {offset: skip, limit: +perPage}).then(orders => {
+    return await Order.paginate({ ownerId: mongoose.mongo.ObjectId(userId) }, {offset: skip, limit: +perPage}).then(orders => {
         if(orders.docs) {
             return {success: true, data: { orders: orders.docs, total: orders.total } }
         } else {
@@ -98,7 +98,7 @@ export const getReportsPerProduct = async (ownerId, perPage, page, filter) => {
             }
         }
     ]).then(products => {
-        return {success: true, data: { products: products[0].reportsPerProduct, total: products[0].total } }
+        return {success: true, data: { reports: products[0].reportsPerProduct, total: products[0].total } }
     }).catch(err => {
         return {success: false, error: err}
     })
@@ -112,11 +112,11 @@ export const getReportsPerStuff = async (ownerId, perPage, page, filter) => {
         {
             $match: {
                 ownerId: mongoose.mongo.ObjectId(ownerId),
-                // $or: [
-                //     { 'seller.firstName': { '$regex': filter, '$options': 'i' } },
-                //     { 'seller.lastName': { '$regex': filter, '$options': 'i' } },
-                //     { 'seller.email': { '$regex': filter, '$options': 'i' } }
-                // ]
+                $or: [
+                    { 'seller.firstName': { '$regex': filter, '$options': 'i' } },
+                    { 'seller.lastName': { '$regex': filter, '$options': 'i' } },
+                    { 'seller.email': { '$regex': filter, '$options': 'i' } }
+                ]
             }
         },
         {
@@ -150,8 +150,8 @@ export const getReportsPerStuff = async (ownerId, perPage, page, filter) => {
         }
     ])
       .then(products => {
-          return {success: true, data: { products: products } }
-          // return {success: true, data: { products: products[0].reportsPerStaff, total: products[0].total } }
+          //return {success: true, data: { products: products } }
+          return {success: true, data: { reports: products[0].reportsPerStaff, total: products[0].total } }
       }).catch(err => {
           return {success: false, error: err}
       })
@@ -160,7 +160,7 @@ export const getReportsPerStuff = async (ownerId, perPage, page, filter) => {
 export const getSellerOrders = async (userId, perPage, page) => {
 
     let skip = (page - 1) * perPage;
-    return await Order.paginate({createdBy: mongoose.mongo.ObjectId(userId)}, {offset: skip, limit: +perPage}).then(orders => {
+    return await Order.paginate({ 'seller._id': mongoose.mongo.ObjectId(userId) }, {offset: skip, limit: +perPage}).then(orders => {
         if(orders.docs) {
             return {success: true, data: { orders: orders.docs, total: orders.total } }
         } else {
