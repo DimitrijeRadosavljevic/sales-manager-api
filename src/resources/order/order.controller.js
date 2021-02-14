@@ -47,3 +47,14 @@ export const getReportsPerProduct = async (req, res) => {
         return respondError(res, "Error ocured: "+ reportsPerProduct.error);
     }
 }
+
+
+export const getSellerOrders = async (req, res) => {
+    console.log("Orders" + req.user._id);
+    const orders = await orderRepository.getSellerOrders(req.user._id, req.query.perPage || 6, req.query.page || 1);
+    if(orders.success == true) {
+        return respondSuccess(res, orders.data, 200);
+    } else {
+        return respondError(res, "Error ocured: " + orders.error, 500);
+    }
+}
