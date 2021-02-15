@@ -9,7 +9,7 @@ export const postProduct = async (req, res) => {
         imagePath = 'http://localhost:3000/product_images/' + req.file.filename;
     }
     console.log(req.file);
-    const product = await productRepository.postProduct(Product, req.user._id, JSON.parse(req.body.product), imagePath);
+    const product = await productRepository.postProduct(req.user._id, JSON.parse(req.body.product), imagePath);
     if(product.success == true) {
         return respondSuccess(res, product.data, 201);
     } else {
@@ -21,7 +21,7 @@ export const getProducts = async (req, res) => {
 
     const ownerId = req.user.owner ? req.user._id : req.user.ownerId
 
-    const products = await productRepository.getProducts(Product, ownerId, req.query.perPage || 6, req.query.page || 1, req.query.filter || "");
+    const products = await productRepository.getProducts(ownerId, req.query.perPage || 6, req.query.page || 1, req.query.filter || "");
     if(products.success == true) {
         return respondSuccess(res, products.data, 200);
     } else {
@@ -33,7 +33,7 @@ export const getProduct = async (req, res) => {
 
     //TODO Check does user own product
 
-    const product = await productRepository.getProduct(Product, req.params.productId);
+    const product = await productRepository.getProduct(req.params.productId);
     if(product.success == true) {
         return respondSuccess(res, product.data, 200);
     } else {

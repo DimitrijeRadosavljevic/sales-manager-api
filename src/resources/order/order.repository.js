@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 import { Order } from "./order.model";
 
 
-export const getOrders = async (userId, perPage, page) => {
+export const getOrders = async (userId, perPage, page, filter) => {
 
     let skip = (page - 1) * perPage;
-    return await Order.paginate({ ownerId: mongoose.mongo.ObjectId(userId) }, {offset: skip, limit: +perPage}).then(orders => {
+    return await Order.paginate({ ownerId: mongoose.mongo.ObjectId(userId), $or: [{ 'userDetail.name': {$regex: filter, "$options": "i"}}, { 'userDetail.lastName': {$regex: filter, "$options": "i"}}, { 'userDetail.email': {$regex: filter, "$options": "i"}}] }, {offset: skip, limit: +perPage}).then(orders => {
         if(orders.docs) {
             return {success: true, data: { orders: orders.docs, total: orders.total } }
         } else {
@@ -157,10 +157,10 @@ export const getReportsPerStuff = async (ownerId, perPage, page, filter) => {
       })
 }
 
-export const getSellerOrders = async (userId, perPage, page) => {
+export const getSellerOrders = async (userId, perPage, page, filter) => {
 
     let skip = (page - 1) * perPage;
-    return await Order.paginate({ 'seller._id': mongoose.mongo.ObjectId(userId) }, {offset: skip, limit: +perPage}).then(orders => {
+    return await Order.paginate({ 'seller._id': mongoose.mongo.ObjectId(userId),   $or: [{ 'userDetail.name': {$regex: filter, "$options": "i"}}, { 'userDetail.lastName': {$regex: filter, "$options": "i"}}, { 'userDetail.email': {$regex: filter, "$options": "i"}}]}, {offset: skip, limit: +perPage}).then(orders => {
         if(orders.docs) {
             return {success: true, data: { orders: orders.docs, total: orders.total } }
         } else {
@@ -168,5 +168,15 @@ export const getSellerOrders = async (userId, perPage, page) => {
         }
     }).catch(err => {
         return {success: false, error: err}
+    })
+}
+
+export const updateOrderStatus = async (orderId, orderStatus) => {
+    const orderForUpdate = mongoose.mongo.ObjectId(orderId);
+    console.log("OrderId: " + orderId + "OrderStatus: " + orderStatus.newStatus);
+    return await Order.findByIdAndUpdate(orderForUpdate, { status: orderStatus.newStatus }).then(order => {
+        return { success: true, data: order }
+    }).catch(error => {
+        return { success: false, error: error}
     })
 }

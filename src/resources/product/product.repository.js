@@ -1,20 +1,20 @@
 import mongoose from 'mongoose';
 import { Product } from "./product.model"
 
-export const postProduct = async (productSchema, userId, product, imagePath) => {
+export const postProduct = async (userId, product, imagePath) => {
 
     const productForCreation = {...product, imagePath: imagePath, ownerId: mongoose.mongo.ObjectId(userId) }
-    return await productSchema.create(productForCreation).then(data => {
+    return await Product.create(productForCreation).then(data => {
         return {success: true, data: data}
     }).catch(err => {
         return {success: false, error: err};
     })
 }
 
-export const getProducts = async (productShema, userId, perPage, page, filter) => {
+export const getProducts = async (userId, perPage, page, filter) => {
 
     let skip = (page - 1) * perPage;
-    return await productShema.paginate({ownerId: mongoose.mongo.ObjectId(userId), $or: [{ name: {$regex: filter, "$options": "i"}},{ code: {$regex: filter, "$options": "i"}}]}, {offset: skip, limit: +perPage}).then(products => {
+    return await Product.paginate({ownerId: mongoose.mongo.ObjectId(userId), $or: [{ name: {$regex: filter, "$options": "i"}},{ code: {$regex: filter, "$options": "i"}}]}, {offset: skip, limit: +perPage}).then(products => {
         if(products.docs) {
             return {success: true, data: { products: products.docs, total: products.total } }
         } else {
@@ -25,9 +25,9 @@ export const getProducts = async (productShema, userId, perPage, page, filter) =
     })
 }
 
-export const getProduct = async (productShema, productId) => {
+export const getProduct = async (productId) => {
 
-    return await productShema.findById(productId).then(product => {
+    return await Product.findById(productId).then(product => {
         
         if(product) {
             return {success: true, data: product }
@@ -53,6 +53,16 @@ export const updateProduct = async (productId, product, imagePath) => {
     const productForUpdateId = mongoose.mongo.ObjectId(productId);
     const productForUpdate = { ...product, imagePath: imagePath }; 
     return await Product.findByIdAndUpdate(productForUpdateId, productForUpdate).then(data => {
+        return {success: true, data: data}
+    }).catch(err => {
+        return {success: false, error: err};
+    })
+}
+
+export const updateProductQuantity = async (productId, newProductQuantity) => {
+    console.log("ProductId: " + productId, "newPRoductQuantity: " + newProductQuantity);
+    const productForUpdateId = mongoose.mongo.ObjectId(productId);
+    return await Product.findByIdAndUpdate(productForUpdateId, { quantity: newProductQuantity }).then(data => {
         return {success: true, data: data}
     }).catch(err => {
         return {success: false, error: err};
