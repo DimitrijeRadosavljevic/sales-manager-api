@@ -36,8 +36,6 @@ export const getOrder = async (req, res) => {
 
     //const user = await User.findById(req.user._id);
 
-    //TODO Sheck does user own order
-
     const order = await orderRepository.getOrder(req.params.orderId);
     if(order.success == true) {
         return respondSuccess(res, order.data, 200);

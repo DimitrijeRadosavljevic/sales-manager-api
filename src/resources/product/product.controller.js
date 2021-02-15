@@ -31,8 +31,6 @@ export const getProducts = async (req, res) => {
 
 export const getProduct = async (req, res) => {
 
-    //TODO Check does user own product
-
     const product = await productRepository.getProduct(req.params.productId);
     if(product.success == true) {
         return respondSuccess(res, product.data, 200);
@@ -42,8 +40,6 @@ export const getProduct = async (req, res) => {
 }
 
 export const deleteProduct = async (req, res) => {
-
-    //TODO Check does user own product
 
     const deleteImageSuccess = await fileDelete.unlinkFile(req.query.imagePath);
 
@@ -59,8 +55,6 @@ export const deleteProduct = async (req, res) => {
 }
 
 export const updateProduct = async (req, res) => {
-
-    //TODO Check does user own product
 
     let imagePath = JSON.parse(req.body.product).imagePath;
 
